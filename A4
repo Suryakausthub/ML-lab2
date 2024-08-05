@@ -1,0 +1,51 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+# Read the specific sheet directly into a DataFrame
+f = pd.read_excel(r"C:\Users\year3\Desktop\lab2\Lab Session Data.xlsx", sheet_name=1)
+
+# Display the DataFrame
+print(f)
+
+
+t =f['Price'].mean()
+print("mean of the price is ", t)
+
+k = f['Price'].var()
+print("variance of the price is ", k)
+
+a = f[f['Day'] == 'Wed']['Price']
+v = a.mean()
+print(v)
+
+b = f[f['Month'] == 'Apr']['Price']
+bb= b.mean()
+print(bb)
+
+loss = f['Chg%'].apply(lambda x: x < 0)
+percent = ((f[loss].shape[0])/f.shape[0])
+print(percent)
+
+
+profit_days_apr = f.loc[f['Month'] == 'Apr', 'Chg%'] > 0
+percent_profit_apr = profit_days_apr.mean()
+print(f"Percentage of profit days in April: {percent_profit_apr:.2%}")
+
+wednesday_chg = f[f['Day'] == 'Wed']['Chg%']
+profit_count = sum(chg > 0 for chg in wednesday_chg)
+total_wednesday_count = len(wednesday_chg)
+prob_profit_wednesday = profit_count / total_wednesday_count
+
+print(f"Probability of Making a Profit on Wednesday: {prob_profit_wednesday}")
+
+
+plt.figure(figsize=(10, 6))
+plt.scatter(f['Day'], f['Chg%'])
+plt.xlabel('Day of the Week')
+plt.ylabel('Change Percentage (Chg%)')
+plt.title('Scatter Plot of Chg% Data Against the Day of the Week')
+plt.xticks(rotation=45)
+plt.show()
+
+
